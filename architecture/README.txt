@@ -12,7 +12,9 @@ The infrastructure is deployed on Vultr Cloud inside a private Virtual Private C
 
 # Architecture Diagram
 
-![Lab Architecture](Lab-Architecture.png)
+
+![SOC Lab Architecture](Diagram.png)
+
 
 ---
 
