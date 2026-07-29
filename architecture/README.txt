@@ -1,4 +1,4 @@
- SOC Lab Architecture
+SOC Lab Architecture
 
 ## Overview
 
@@ -12,9 +12,7 @@ The infrastructure is deployed on Vultr Cloud inside a private Virtual Private C
 
 # Architecture Diagram
 
-
-![SOC Lab Architecture](Diagram.png)
-
+![Lab Architecture](Lab-Architecture.png)
 
 ---
 
