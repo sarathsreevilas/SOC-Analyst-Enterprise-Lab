@@ -16,6 +16,17 @@ The lab simulates the complete Security Operation Center workflow from attack si
 
 -------
 
+
+## Project Highlights
+
+- Built a cloud-hosted enterprise SOC using Vultr Cloud
+- Centralized Windows and Linux endpoint monitoring with Elastic Stack
+- Managed endpoints using Fleet Server and Elastic Defend
+- Simulated real-world attacks with Mythic C2
+- Created custom detection rules and KQL threat hunts
+- Automated incident creation using Webhook Connectors and osTicket
+
+
 # Lab Objective
 
 The objectives of this project include:
@@ -152,6 +163,22 @@ A realistic attack simulation was performed to validate the monitoring and detec
 
 ---
 
+
+# MITRE ATT&CK Techniques Demonstrated During Attack Simulation
+
+| ATT&CK Tactic | Technique | ID | Lab Activity |
+|---------------|-----------|----|--------------|
+| Execution | PowerShell | T1059.001 | Executed PowerShell commands during attack simulation |
+| Execution | Windows Command Shell | T1059.003 | Executed `cmd.exe` commands |
+| Command and Control | Ingress Tool Transfer | T1105 | Downloaded the Mythic payload using `Invoke-WebRequest` |
+| Command and Control | Application Layer Protocol | T1071 | Established a Mythic C2 callback over HTTP/HTTPS |
+| Discovery | System Information Discovery | T1082 | Executed `hostname` to identify the system |
+| Discovery | System Owner/User Discovery | T1033 | Executed `whoami` to identify the logged-on user |
+| Discovery | System Network Configuration Discovery | T1016 | Executed `ipconfig` to enumerate network configuration |
+
+---
+
+
 # Security Monitoring
 
 The environment supports monitoring and investigation of:
@@ -173,6 +200,82 @@ The environment supports monitoring and investigation of:
 - Incident Ticket Creation
 
 ---
+
+# KQL queries
+
+PowerShell execution
+
+event.code:1 and
+winlog.event_data.Image:*powershell.exe
+
+Command Prompt execution
+
+event.code:1 and
+winlog.event_data.Image:*cmd.exe
+
+Rundll32 execution
+
+event.code:1 and
+winlog.event_data.Image:*rundll32.exe
+
+Encoded PowerShell
+
+winlog.event_data.CommandLine:*EncodedCommand*
+
+New Service creation
+
+event.code:7045
+
+Defender disabled
+
+event.code:5001
+
+New user created
+
+event.code:4720
+
+Base64 PowerShell
+
+winlog.event_data.CommandLine:*FromBase64String*
+
+Failed SSH logins
+
+system.auth.ssh.event:* and agent.name: Linux-Smug and system.auth.ssh.event: Failed
+
+Failed Windows logons
+
+event.code:4625 and agent.name: WIN-Smug
+
+Successful RDP logins
+
+event.code:4624 and (winlog.event_data.LogonType:10 or winlog.event_data.LogonType:7)
+
+Sysmon Network Connections
+
+
+event.code:3
+and event.provider:"Microsoft-Windows-Sysmon"
+and winlog.event_data.Initiated:true
+
+Excluding Defender traffic
+
+event.code:3
+and event.provider:"Microsoft-Windows-Sysmon"
+and winlog.event_data.Initiated:true
+and not winlog.event_data.Image:*MsMpEng.exe
+
+IOC search using hash
+
+event.code:1 and
+(
+winlog.event_data.Hashes:*HASH*
+or
+winlog.event_data.OriginalFileName:Apollo.exe
+)
+
+
+
+
 
 # Detection Engineering
 
@@ -380,7 +483,7 @@ Future enhancements include:
 
 # Author
 
-**Sarath Sreevilas**
+SARATH SOMASEKHARAN NAIR
 
 SOC Analyst Portfolio Project
 
